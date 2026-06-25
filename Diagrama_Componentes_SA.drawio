@@ -1,0 +1,79 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Diagrama de Componentes" id="0">
+    <mxGraphModel dx="4741" dy="798" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-1" parent="1" style="shape=component;" value="Interfaz Web/App" vertex="1">
+          <mxGeometry height="60" width="180" x="-2740" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-2" parent="1" style="shape=component;" value="Gestión Usuarios&#xa;(Usuario)" vertex="1">
+          <mxGeometry height="80" width="180" x="-3040" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-3" parent="1" style="shape=component;" value="Gestión Carrito&#xa;(Carrito)" vertex="1">
+          <mxGeometry height="80" width="180" x="-2616" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-4" parent="1" style="shape=component;" value="Gestión Pedidos&#xa;(Pedido, EstadoPedido)" vertex="1">
+          <mxGeometry height="80" width="220" x="-2760" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-5" parent="1" style="shape=component;" value="Detalle Pedido&#xa;(DetallePedido)" vertex="1">
+          <mxGeometry height="80" width="220" x="-2760" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-6" parent="1" style="shape=component;" value="Productos&#xa;(Producto)" vertex="1">
+          <mxGeometry height="80" width="220" x="-2760" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-7" parent="1" style="shape=component;" value="Categorías&#xa;(Categoría)" vertex="1">
+          <mxGeometry height="80" width="220" x="-2760" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-8" parent="1" style="shape=component;" value="Pagos&#xa;(Pago)" vertex="1">
+          <mxGeometry height="80" width="180" x="-2360" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-9" parent="1" style="shape=component;" value="Repartidores&#xa;(Repartidor)" vertex="1">
+          <mxGeometry height="80" width="180" x="-2370" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-10" parent="1" style="shape=component;" value="Notificaciones&#xa;(Notificación)" vertex="1">
+          <mxGeometry height="80" width="180" x="-2370" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-11" parent="1" style="shape=cylinder;" value="Base de Datos" vertex="1">
+          <mxGeometry height="90" width="240" x="-2760" y="830" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-12" edge="1" parent="1" source="UcBC1KWccUDgM0GKGwRp-1" target="UcBC1KWccUDgM0GKGwRp-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-13" edge="1" parent="1" source="UcBC1KWccUDgM0GKGwRp-1" target="UcBC1KWccUDgM0GKGwRp-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-14" edge="1" parent="1" source="UcBC1KWccUDgM0GKGwRp-1" target="UcBC1KWccUDgM0GKGwRp-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-15" edge="1" parent="1" source="UcBC1KWccUDgM0GKGwRp-2" target="UcBC1KWccUDgM0GKGwRp-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-16" edge="1" parent="1" source="UcBC1KWccUDgM0GKGwRp-2" target="UcBC1KWccUDgM0GKGwRp-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-17" edge="1" parent="1" source="UcBC1KWccUDgM0GKGwRp-3" target="UcBC1KWccUDgM0GKGwRp-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-18" edge="1" parent="1" source="UcBC1KWccUDgM0GKGwRp-4" target="UcBC1KWccUDgM0GKGwRp-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-19" edge="1" parent="1" source="UcBC1KWccUDgM0GKGwRp-4" target="UcBC1KWccUDgM0GKGwRp-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-20" edge="1" parent="1" source="UcBC1KWccUDgM0GKGwRp-4" target="UcBC1KWccUDgM0GKGwRp-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-21" edge="1" parent="1" source="UcBC1KWccUDgM0GKGwRp-4" target="UcBC1KWccUDgM0GKGwRp-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-22" edge="1" parent="1" source="UcBC1KWccUDgM0GKGwRp-5" target="UcBC1KWccUDgM0GKGwRp-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UcBC1KWccUDgM0GKGwRp-23" edge="1" parent="1" source="UcBC1KWccUDgM0GKGwRp-6" target="UcBC1KWccUDgM0GKGwRp-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
