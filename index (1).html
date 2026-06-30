@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodify Menu - Delicia en cada bocado</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #db0007;        /* Rojo corporativo (Apetito/Acción) */
+            --primary-hover: #b80005;
+            --accent: #ffbc0d;         /* Amarillo/Oro (Felicidad/Atención) */
+            --dark: #292929;
+            --light: #f4f4f4;
+            --gray: #666666;
+            --light-gray: #e6e6e6;
+            --white: #ffffff;
+            --success: #28a745;
+            --info: #17a2b8;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Speedee', 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #fbfbfb; color: var(--dark); min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* HEADER & NAV */
+        header { background-color: var(--white); position: fixed; top: 0; width: 100%; z-index: 1000; border-bottom: 2px solid var(--accent); box-shadow: var(--shadow); }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; }
+        .logo-area { display: flex; align-items: center; gap: 10px; text-decoration: none; cursor: pointer; }
+        .logo-m { background: var(--primary); color: var(--accent); font-size: 26px; font-weight: 900; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+        .logo-text { font-size: 22px; font-weight: 800; color: var(--primary); }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; transition: color 0.2s; cursor: pointer; font-size: 14px; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+        
+        .btn-register { background-color: var(--primary); color: var(--white) !important; padding: 8px 16px; border-radius: 20px; }
+        .btn-register:hover { background-color: var(--primary-hover); }
+        .btn-logout { background-color: #dc3545; color: var(--white) !important; padding: 6px 12px; border-radius: 6px; font-size: 12px; }
+        .user-tag { background-color: var(--light); padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 13px; color: var(--primary); display: flex; align-items: center; gap: 6px; border: 1px solid var(--light-gray); }
+
+        /* VIEWS MANAGEMENT */
+        .view { display: none; margin-top: 68px; flex: 1; padding-bottom: 60px; }
+        .view.active-view { display: block; }
+
+        /* HERO BANNER */
+        .hero { background: linear-gradient(135deg, #ff4500, var(--primary)); color: var(--white); text-align: center; padding: 70px 20px; border-bottom: 5px solid var(--accent); }
+        .hero h1 { font-size: 42px; font-weight: 800; margin-bottom: 12px; letter-spacing: -1px; }
+        .hero p { font-size: 18px; max-width: 600px; margin: 0 auto 25px auto; opacity: 0.95; }
+        .hero-btns { display: flex; justify-content: center; gap: 15px; }
+        .btn-white { background: var(--white); color: var(--primary); padding: 12px 24px; border-radius: 25px; font-weight: 700; border: none; cursor: pointer; box-shadow: var(--shadow); }
+        .btn-outline { background: transparent; color: var(--white); padding: 12px 24px; border-radius: 25px; font-weight: 700; border: 2px solid var(--white); cursor: pointer; }
+
+        /* PUBLIC HOME INFO */
+        .features { max-width: 1100px; margin: 45px auto; padding: 0 20px; text-align: center; }
+        .features h2 { font-size: 28px; font-weight: 800; margin-bottom: 10px; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 30px; }
+        .feature-card { background: var(--white); padding: 25px 20px; border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--light-gray); }
+        .feature-icon { background-color: #fff3eb; color: var(--primary); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 15px auto; border: 1px solid #ffe4d4; }
+
+        .cta-section { background: #fdfdfd; border-top: 1px solid var(--light-gray); border-bottom: 1px solid var(--light-gray); padding: 50px 20px; text-align: center; }
+        .cta-section h2 { font-size: 28px; font-weight: 800; margin-bottom: 10px; }
+
+        /* COMMERCIAL MENU */
+        .menu-title-area { text-align: center; padding: 30px 20px 10px 20px; }
+        .menu-title-area h2 { font-size: 32px; font-weight: 800; color: var(--dark); }
+        .menu-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .search-box { max-width: 600px; margin: 0 auto 25px auto; position: relative; }
+        .search-box input { width: 100%; padding: 12px 20px 12px 45px; border-radius: 8px; border: 1px solid var(--light-gray); outline: none; font-size: 15px; }
+        .search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gray); }
+        
+        .categories { display: flex; justify-content: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; border-bottom: 1px solid var(--light-gray); padding-bottom: 15px; }
+        .cat-btn { background: var(--white); border: 1px solid var(--light-gray); padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--dark); }
+        .cat-btn.active, .cat-btn:hover { background: var(--primary); color: var(--white); border-color: var(--primary); }
+        
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
+        .prod-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--light-gray); cursor: pointer; transition: transform 0.2s; }
+        .prod-card:hover { transform: translateY(-5px); }
+        .prod-img { width: 100%; height: 180px; object-fit: cover; }
+        .prod-body { padding: 18px; }
+        .prod-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; color: var(--dark); }
+        .prod-desc { color: var(--gray); font-size: 13px; margin-bottom: 12px; height: 36px; overflow: hidden; line-height: 1.4; }
+        .prod-flex { display: flex; justify-content: space-between; align-items: center; }
+        .prod-price { font-weight: 800; color: var(--primary); font-size: 18px; }
+        .badge-out { background: #fee2e2; color: #ef4444; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; }
+
+        /* PRODUCT DETAIL */
+        .detail-container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        .back-btn { background: none; border: none; color: var(--gray); font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .detail-wrapper { display: flex; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--light-gray); }
+        .detail-img-side { width: 50%; object-fit: cover; min-height: 380px; }
+        .detail-info-side { width: 50%; padding: 35px; display: flex; flex-direction: column; justify-content: center; }
+        .tag-cat { background: #fff3eb; color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; align-self: flex-start; margin-bottom: 10px; }
+        .detail-title { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+        .detail-desc { color: var(--gray); font-size: 14px; margin-bottom: 15px; }
+        .ing-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+        .ing-tag { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; padding: 4px 8px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 4px; }
+        .detail-price { font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
+        .qty-selector { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .qty-btn { background: var(--light-gray); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .qty-num { font-size: 18px; font-weight: 700; }
+        .subtotal-box { background: var(--light); padding: 12px 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border: 1px solid var(--light-gray); }
+        .btn-add-cart { background: var(--primary); color: var(--white); border: none; width: 100%; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: var(--shadow); }
+
+        /* CART & CHECKOUT */
+        .cart-container { max-width: 1200px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 440px; gap: 25px; }
+        @media(max-width: 768px) { .cart-container { grid-template-columns: 1fr; } .detail-wrapper { flex-direction: column; } .detail-img-side, .detail-info-side { width: 100%; } }
+        .cart-items-side { background: var(--white); padding: 20px; border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--light-gray); }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--light-gray); }
+        .checkout-side { background: var(--white); padding: 20px; border-radius: 12px; box-shadow: var(--shadow); height: fit-content; border: 1px solid var(--light-gray); }
+        .radio-group { margin: 10px 0; display: flex; flex-direction: column; gap: 6px; }
+        .radio-label { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid var(--light-gray); border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; }
+        .radio-label input { accent-color: var(--primary); width: 16px; height: 16px; }
+
+        /* DYNAMIC FIELDS */
+        .dynamic-fields { background: #fdfdfd; padding: 12px; border-radius: 8px; border: 1px dashed var(--gray); margin-top: 8px; display: none; }
+        .dynamic-fields .form-group { margin-bottom: 8px; }
+        .dynamic-fields input, .dynamic-fields select { width: 100%; padding: 8px 10px; border: 1px solid var(--light-gray); border-radius: 6px; font-size: 13px; background: var(--white); outline: none; }
+
+        /* SYSTEM DASHBOARDS (PANELS) */
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--light-gray); padding-bottom: 10px; }
+        .grid-ecosystem { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 15px; }
+        .order-card { background: var(--white); border-radius: 8px; border: 1px solid var(--light-gray); padding: 15px; box-shadow: var(--shadow); position: relative; }
+        .order-badge { position: absolute; top: 15px; right: 15px; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; color: white; }
+
+        /* EXCEL LIVE TABLE SHEET */
+        .excel-card { background: var(--white); border-radius: 8px; border: 1px solid #bbb; box-shadow: var(--shadow); overflow-x: auto; margin-top: 15px; }
+        .excel-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; text-align: left; min-width: 700px; }
+        .excel-table th { background: #e0e0e0; color: #333; font-weight: 700; border: 1px solid #ccc; padding: 6px 10px; }
+        .excel-table td { border: 1px solid #e0e0e0; padding: 6px 10px; color: #444; }
+        .excel-table tr:nth-child(even) { background: #f9f9f9; }
+        .excel-total-row { background: #fff9e6 !important; font-weight: bold; border-top: 2px solid var(--accent); }
+        .excel-total-row td { color: var(--primary); font-size: 14px; }
+
+        /* ADMIN STOCK TABLE */
+        .admin-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); font-size: 14px; border: 1px solid var(--light-gray); }
+        .admin-table th, .admin-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--light-gray); }
+        .admin-table th { background: var(--light); font-weight: 700; }
+        .admin-table input, .admin-table select { padding: 6px; border: 1px solid var(--light-gray); border-radius: 4px; font-size: 13px; outline: none; }
+        .btn-action { border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; color: white; font-weight: 700; font-size: 12px; }
+
+        /* FLOATING CART BUTTON */
+        .floating-cart { position: fixed; bottom: 25px; right: 25px; background: var(--primary); color: var(--white); padding: 15px 25px; border-radius: 30px; font-weight: 700; box-shadow: 0 10px 25px rgba(219, 0, 7, 0.4); cursor: pointer; display: flex; align-items: center; gap: 10px; z-index: 999; display: none; border: 2px solid var(--accent); }
+
+        /* CORPORATE FOOTER (4 COLUMNS) */
+        footer { background: #ffffff; color: var(--dark); border-top: 4px solid var(--primary); padding: 45px 20px 20px 20px; font-size: 14px; margin-top: auto; box-shadow: 0 -4px 10px rgba(0,0,0,0.03); }
+        .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; padding-bottom: 30px; }
+        .footer-col h3 { font-size: 16px; font-weight: 800; margin-bottom: 15px; color: var(--dark); text-transform: uppercase; letter-spacing: 0.5px; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { text-decoration: none; color: var(--gray); transition: color 0.2s; cursor: pointer; }
+        .footer-col ul li a:hover { color: var(--primary); }
+        .footer-brand { display: flex; flex-direction: column; gap: 12px; }
+        .social-icons { display: flex; gap: 12px; font-size: 20px; margin-top: 10px; }
+        .social-icons a { color: var(--dark); transition: color 0.2s; }
+        .social-icons a:hover { color: var(--primary); }
+        .apps-badges { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .app-btn { background: #000; color: #fff; padding: 6px 12px; border-radius: 6px; display: flex; align-items: center; gap: 8px; text-decoration: none; width: fit-content; font-size: 11px; }
+        .app-btn i { font-size: 16px; }
+        .footer-bottom { border-top: 1px solid var(--light-gray); text-align: center; padding-top: 20px; color: var(--gray); font-size: 12px; font-weight: 500; }
+
+        /* MODALS */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 2000; }
+        .modal.active { opacity: 1; pointer-events: auto; }
+        .modal-content { background: var(--white); padding: 30px; border-radius: 12px; width: 100%; max-width: 380px; position: relative; border-top: 6px solid var(--primary); }
+        .close-modal { position: absolute; top: 15px; right: 15px; font-size: 20px; cursor: pointer; color: var(--gray); }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid var(--light-gray); border-radius: 6px; outline: none; font-size: 14px; }
+        .btn-submit { width: 100%; background: var(--primary); color: var(--white); border: none; padding: 12px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 15px; }
+        .btn-submit:hover { background-color: var(--primary-hover); }
+        .modal-switch { text-align: center; margin-top: 15px; font-size: 13px; color: var(--gray); }
+        .modal-switch span { color: var(--primary); cursor: pointer; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo-area" onclick="navigateTo('home')">
+                <div class="logo-m">F</div>
+                <div class="logo-text">Foodify Menu</div>
+            </div>
+            <nav class="nav-links">
+                <a onclick="navigateTo('home')" id="link-home" class="active">Inicio</a>
+                <a onclick="navigateTo('menu')" id="link-menu">Menú</a>
+                
+                <a onclick="navigateTo('cocina')" id="link-cocina" style="display: none;"><i class="fa-solid fa-fire-burner"></i> Cocina</a>
+                <a onclick="navigateTo('caja')" id="link-caja" style="display: none;"><i class="fa-solid fa-cash-register"></i> Caja</a>
+                <a onclick="navigateTo('admin')" id="link-admin" style="display: none;"><i class="fa-solid fa-gears"></i> Admin</a>
+                
+                <div id="auth-buttons" style="display: flex; align-items: center; gap: 15px;">
+                    <a onclick="openModal('login-modal')">Iniciar Sesión</a>
+                    <a onclick="openModal('register-modal')" class="btn-register">Registrarse</a>
+                </div>
+                <div id="user-profile" style="display: none; align-items: center; gap: 15px;">
+                    <span class="user-tag" id="user-display"></span>
+                    <a onclick="logout()" class="btn-logout">Salir</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="view active-view" id="view-home">
+        <section class="hero">
+            <h1>Bienvenido a Foodify Menu</h1>
+            <p>Tu restaurante de comida rápida favorito. Ordena fácil y rápido desde nuestra plataforma digital.</p>
+            <div class="hero-btns">
+                <button class="btn-white" onclick="navigateTo('menu')">Ver Menú</button>
+                <button class="btn-outline" id="btn-hero-register" onclick="openModal('register-modal')">Registrarse</button>
+            </div>
+        </section>
+        
+        <section class="features">
+            <h2>¿Por qué elegir Foodify Menu?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-utensils"></i></div>
+                    <h3>Comida Deliciosa</h3>
+                    <p>Los mejores ingredientes para los mejores sabores</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-clock"></i></div>
+                    <h3>Entrega Rápida</h3>
+                    <p>Tu pedido listo en tiempo récord</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+                    <h3>Fácil de Ordenar</h3>
+                    <p>Sistema simple e intuitivo para tus pedidos</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3>Seguro y Confiable</h3>
+                    <p>Tus datos protegidos en todo momento</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2>¿Listo para ordenar?</h2>
+            <p style="color: var(--gray); margin-bottom: 20px;">Regístrate ahora y disfruta de la mejor comida rápida con delivery a domicilio</p>
+            <button class="btn-white" style="background:var(--primary); color:white; padding:14px 35px;" onclick="navigateTo('menu')">Comenzar Ahora</button>
+        </section>
+    </div>
+
+    <div class="view" id="view-menu">
+        <div class="menu-title-area">
+            <h2>Nuestro Menú</h2>
+            <p style="color:var(--gray); font-size:14px; margin-top:4px;">Descubre nuestros deliciosos productos</p>
+        </div>
+        <div class="menu-container">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-input" placeholder="Buscar productos..." oninput="renderMenu()">
+            </div>
+            <div class="categories">
+                <button class="cat-btn active" onclick="setCategory('todas', this)">Todas</button>
+                <button class="cat-btn" onclick="setCategory('hamburguesas', this)">Hamburguesas</button>
+                <button class="cat-btn" onclick="setCategory('pizzas', this)">Pizzas</button>
+                <button class="cat-btn" onclick="setCategory('alitas', this)">Alitas</button>
+                <button class="cat-btn" onclick="setCategory('acompañamientos', this)">Acompañamientos</button>
+                <button class="cat-btn" onclick="setCategory('perros calientes', this)">Perros Calientes</button>
+                <button class="cat-btn" onclick="setCategory('bebidas', this)">Bebidas</button>
+            </div>
+            <div class="menu-grid" id="menu-grid-container"></div>
+        </div>
+    </div>
+
+    <div class="view" id="view-detail">
+        <div class="detail-container">
+            <button class="back-btn" onclick="navigateTo('menu')"><i class="fa-solid fa-arrow-left"></i> Volver al menú</button>
+            <div class="detail-wrapper" id="detail-wrapper-content"></div>
+        </div>
+    </div>
+
+    <div class="view" id="view-cart">
+        <div class="cart-container">
+            <div class="cart-items-side">
+                <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-cart-shopping"></i> Tu Carrito</h3>
+                <div id="cart-list-items"></div>
+            </div>
+            <div class="checkout-side">
+                <h3 style="border-bottom:2px solid var(--light-gray); padding-bottom:8px; margin-bottom:12px;">Facturación</h3>
+                <div style="margin: 15px 0; font-size: 18px; font-weight: 800; display: flex; justify-content: space-between;">
+                    <span>Total Orden:</span><span id="checkout-total-price" style="color: var(--primary); font-size:22px;">$0</span>
+                </div>
+                
+                <label style="font-weight: 700; font-size:12px; color: var(--gray);">1. MODALIDAD DE SERVICIO</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="delivery-type" value="Domicilio" checked onchange="updateServiceFlow()"> 🛵 Solicitar Domicilio</label>
+                    <label class="radio-label"><input type="radio" name="delivery-type" value="Comer en el Establecimiento" onchange="updateServiceFlow()"> 🍽️ Comer en el Establecimiento</label>
+                    <label class="radio-label"><input type="radio" name="delivery-type" value="Para Llevar" onchange="updateServiceFlow()"> 🛍️ Para Llevar</label>
+                </div>
+
+                <div id="delivery-address-field" class="dynamic-fields" style="display: block;">
+                    <div class="form-group"><label>Dirección de Domicilio *</label><input type="text" id="checkout-address" placeholder="Ej: Calle 45 #12-34"></div>
+                </div>
+
+                <label style="font-weight: 700; font-size:12px; color: var(--gray); margin-top: 15px; display:block;">2. PASARELA DE PAGO</label>
+                <div class="radio-group" id="payment-methods-wrapper"></div>
+
+                <div id="pse-fields" class="dynamic-fields">
+                    <div class="form-group">
+                        <label>Tipo de Persona</label>
+                        <select id="pse-type"><option value="Natural">Natural (Particular)</option><option value="Juridica">Jurídica (Empresa)</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Banco Cooperante</label>
+                        <select id="pse-bank">
+                            <option value="">-- Elige tu Entidad --</option><option value="Bancolombia">Bancolombia</option><option value="Davivienda">Davivienda</option><option value="Nequi">Nequi</option><option value="Daviplata">Daviplata</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Nombre Completo del Titular</label><input type="text" id="pse-name" placeholder="Como aparece en el banco"></div>
+                    <div class="form-group"><label>Número de Documento (Cédula/NIT)</label><input type="number" id="pse-doc" placeholder="Número de identificación"></div>
+                </div>
+
+                <div id="credit-fields" class="dynamic-fields">
+                    <div class="form-group"><label>Nombre en la Tarjeta</label><input type="text" id="card-name" placeholder="Ej: JUAN PEREZ"></div>
+                    <div class="form-group"><label>Número de Tarjeta</label><input type="text" id="card-num" placeholder="0000 0000 0000 0000"></div>
+                    <div style="display: flex; gap: 8px;">
+                        <div class="form-group" style="flex:1;"><label>Vencimiento</label><input type="text" id="card-exp" placeholder="MM/AA" maxlength="5"></div>
+                        <div class="form-group" style="flex:1;"><label>Código CVV</label><input type="password" id="card-cvc" placeholder="***" maxlength="4"></div>
+                    </div>
+                </div>
+
+                <button class="btn-add-cart" style="background: var(--success); margin-top: 20px;" onclick="processPayment()">
+                    <i class="fa-solid fa-circle-check"></i> Enviar y Procesar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="view" id="view-cocina">
+        <div class="menu-container">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-fire-burner" style="color:var(--primary)"></i> Consola Operativa de Cocina</h2>
+                <span class="user-tag" style="background:#fff3eb;">Módulo de Producción</span>
+            </div>
+            
+            <h3 style="margin-top:20px; font-weight:800;"><i class="fa-solid fa-rectangle-list"></i> Comandas en Cola</h3>
+            <div class="grid-ecosystem" id="cocina-orders-container"></div>
+
+            <h3 style="margin-top:40px; font-weight:800; border-top:2px solid var(--light-gray); padding-top:20px;"><i class="fa-solid fa-boxes-stacked"></i> Autonomía de Inventario (Cocineros)</h3>
+            <p style="font-size:13px; color:var(--gray); margin-bottom:15px;">Modifica el stock crítico de platos de inmediato para evitar ventas erróneas en caja o web.</p>
+            <div id="cocina-stock-container">
+                </div>
+        </div>
+    </div>
+
+    <div class="view" id="view-caja">
+        <div class="menu-container">
+            <div class="panel-header">
+                <h2><i class="fa-solid fa-cash-register" style="color:var(--success)"></i> Monitor de Caja y Auditoría</h2>
+                <span class="user-tag" style="background:#ebffef; color:var(--success);">Módulo Financiero</span>
+            </div>
+
+            <h3 style="font-weight:800; margin-bottom:10px;"><i class="fa-solid fa-hourglass-half"></i> Órdenes Pendientes por Cobrar</h3>
+            <div class="grid-ecosystem" id="caja-orders-container" style="margin-bottom:35px;"></div>
+
+            <h3 style="font-weight:800; border-top:2px solid var(--light-gray); padding-top:20px;"><i class="fa-solid fa-file-excel" style="color:#1d6f42"></i> Registro de Libro Diario de Ventas (Excel Sheet)</h3>
+            <p style="font-size:13px; color:var(--gray); margin-bottom:12px;">Auditoría contable interactiva del día actual. Las ventas mediante PSE y Tarjeta ingresan cuadradas.</p>
+            
+            <div class="excel-card">
+                <table class="excel-table">
+                    <thead>
+                        <tr>
+                            <th>ID Transac.</th>
+                            <th>Cliente</th>
+                            <th>Modalidad Servicio</th>
+                            <th>Pasarela Pago</th>
+                            <th>Estado Factura</th>
+                            <th>Valor Neto</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="excel-table-body"></tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top:20px; display:flex; justify-content:flex-end;">
+                <button class="btn-action" style="background:#1d6f42; padding:10px 20px; font-size:13px;" onclick="executeDailyBoxClose()">
+                    <i class="fa-solid fa-box-archive"></i> Realizar Cierre de Caja y Congelar Historial
+                </button>
+            </div>
+
+            <h3 style="font-weight:800; margin-top:35px;"><i class="fa-solid fa-clock-rotate-left"></i> Historial Consolidado de Cierres Diarios</h3>
+            <div class="excel-card" style="margin-top:10px; border-color:#999;">
+                <table class="excel-table">
+                    <thead>
+                        <tr style="background:#ccc;">
+                            <th>Fecha de Cierre</th>
+                            <th>Total Recaudado Real</th>
+                            <th>Cant. Órdenes Guardadas</th>
+                            <th>Operador Auditor</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-box-body">
+                        <tr><td colspan="4" style="text-align:center; color:var(--gray); padding:12px;">No se registran cierres consolidados archivados.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="view" id="view-admin">
+    <div class="menu-container">
+        <div class="panel-header">
+            <h2><i class="fa-solid fa-gears"></i> Administración Central e Inventario Maestro</h2>
+            <span class="user-tag" style="background:var(--light);">Acceso Supremo</span>
+        </div>
+        <table class="admin-table">
+            <thead><tr><th>Producto</th><th>Categoría</th><th>Precio ($)</th><th>Stock Físico</th><th>Estado Comercial</th><th>Acción</th></tr></thead>
+            <tbody id="admin-table-body"></tbody>
+        </table>
+
+        <div style="margin-top: 40px; border-top: 2px solid var(--light-gray); padding-top: 20px;">
+            <h3 style="font-size: 20px; font-weight: 800; color: var(--dark); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-comments"></i> Buzón de Opiniones de Clientes
+            </h3>
+            
+            <table class="admin-table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                <thead>
+                    <tr style="background: var(--light);">
+                        <th style="padding: 10px; border: 1px solid var(--light-gray); text-align: left;">Fecha / Hora</th>
+                        <th style="padding: 10px; border: 1px solid var(--light-gray); text-align: left;">Cliente</th>
+                        <th style="padding: 10px; border: 1px solid var(--light-gray); text-align: left;">Correo Electrónico</th>
+                        <th style="padding: 10px; border: 1px solid var(--light-gray); text-align: left;">Mensaje / Sugerencia</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-feedback-tbody">
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: var(--gray); padding: 15px; font-style: italic;">
+                            No se registran opiniones en el buzón aún.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+</div>
+
+    <div class="floating-cart" id="floating-cart-btn" onclick="navigateTo('cart')">
+        <i class="fa-solid fa-basket-shopping"></i> <span id="floating-cart-count">0</span> Items - Total: <span id="floating-cart-total">$0</span>
+    </div>
+
+  <!-- FOOTER MODERNO CON CONTACTO, HORARIOS Y COMENTARIOS SEGUROS -->
+<footer>
+    <div class="footer-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+        
+        <!-- Columna 1: Contacto e Información -->
+        <div class="footer-col">
+            <h3>Contacto</h3>
+            <p style="color: var(--gray); font-size: 13px; line-height: 1.6; margin-top: 10px;">
+                📍 Bogotá, Colombia<br>
+                📞 Celular / WhatsApp: +57 300 123 4567<br>
+                ✉️ Correo: soporte@foodifymenu.com
+            </p>
+            <div class="social-icons" style="margin-top: 15px; display: flex; gap: 10px;">
+                <a href="#" title="Facebook" style="color: var(--dark); font-size: 18px;"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" title="Instagram" style="color: var(--dark); font-size: 18px;"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </div>
+
+        <!-- Columna 2: Horarios de Atención -->
+        <div class="footer-col">
+            <h3>Horarios de Atención</h3>
+            <p style="color: var(--gray); font-size: 13px; line-height: 1.6; margin-top: 10px;">
+                <b>Lunes a Viernes:</b><br>
+                11:30 AM - 9:30 PM<br><br>
+                <b>Sábados, Domingos y Festivos:</b><br>
+                11:30 AM - 11:00 PM
+            </p>
+        </div>
+
+        <!-- Columna 3: Formulario Seguro de Opiniones (Contenedor DIV para evitar bugs) -->
+        <div class="footer-col" style="grid-column: span 2;">
+            <h3>Déjanos tu Opinión</h3>
+            <p style="color: var(--gray); font-size: 12px; margin-bottom: 8px;">Debes estar registrado e iniciar sesión para enviar tus sugerencias.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="feed-name" placeholder="Tu Nombre" required style="width: 50%; padding: 10px; border: 1px solid var(--light-gray); border-radius: 6px; font-size: 13px;">
+                    <input type="email" id="feed-email" placeholder="Tu Correo" required style="width: 50%; padding: 10px; border: 1px solid var(--light-gray); border-radius: 6px; font-size: 13px;">
+                </div>
+                <textarea id="feed-msg" placeholder="Escribe tu mensaje o sugerencia aquí..." required rows="3" style="width: 100%; padding: 10px; border: 1px solid var(--light-gray); border-radius: 6px; font-size: 13px; resize: none;"></textarea>
+                
+                <!-- Botón de acción con evento onclick seguro -->
+                <button type="button" class="btn-action" style="background: var(--primary); align-self: flex-end; padding: 10px 24px; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;" onclick="submitSecureFeedback()">
+                    Enviar Comentario
+                </button>
+            </div>
+        </div>
+
+    </div>
+    <div class="footer-bottom" style="text-align: center; padding: 20px; border-top: 1px solid var(--light-gray); font-size: 12px; color: var(--gray);">
+        <p>&copy; 2026 Foodify Menu - Todos los derechos reservados.</p>
+    </div>
+</footer>
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <i class="fa-solid fa-xmark close-modal" onclick="closeModal('login-modal')"></i>
+            <h2 style="font-weight:800; margin-bottom:5px;">Iniciar Sesión</h2>
+            <p style="font-size:12px; color:var(--gray); margin-bottom:15px;">Ingresa tus credenciales del personal o de cliente.</p>
+            <form onsubmit="executeLogin(event)">
+                <div class="form-group"><label>Correo Electrónico</label><input type="email" id="login-email" required placeholder="ejemplo@foodify.com"></div>
+                <div class="form-group"><label>Contraseña</label><input type="password" id="login-pass" required placeholder="******"></div>
+                <button type="submit" class="btn-submit">Ingresar al Sistema</button>
+            </form>
+            <div class="modal-switch">¿Eres nuevo cliente? <span onclick="switchModal('login-modal', 'register-modal')">Regístrate</span></div>
+        </div>
+    </div>
+
+    <div class="modal" id="register-modal">
+        <div class="modal-content">
+            <i class="fa-solid fa-xmark close-modal" onclick="closeModal('register-modal')"></i>
+            <h2 style="font-weight:800; margin-bottom:15px;">Crear Cuenta Cliente</h2>
+            <form onsubmit="executeRegister(event)">
+                <div class="form-group"><label>Nombre Completo</label><input type="text" id="reg-name" required placeholder="Tu Nombre"></div>
+                <div class="form-group"><label>Correo Electrónico</label><input type="email" id="reg-email" required placeholder="correo@ejemplo.com"></div>
+                <div class="form-group"><label>Contraseña</label><input type="password" id="reg-pass" required minlength="6"></div>
+                <button type="submit" class="btn-submit">Registrarme</button>
+            </form>
+            <div class="modal-switch">¿Ya posees cuenta? <span onclick="switchModal('register-modal', 'login-modal')">Inicia Sesión</span></div>
+        </div>
+    </div>
+
+    <script>
+        // BD LOCAL INICIAL MAESTRA DE PRODUCTOS
+        let products = [
+            { id: 1, name: 'Hamburguesa Monster Cheese', category: 'hamburguesas', price: 24900, desc: 'Doble carne angus, queso cheddar fundido y salsa secreta.', stock: 15, visible: true, ingredients: ['Carne Angus', 'Cheddar'], img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500' },
+            { id: 2, name: 'Hamburguesa BBQ Bacon', category: 'hamburguesas', price: 26500, desc: 'Tocino ahumado, aros de cebolla crocantes y salsa BBQ.', stock: 12, visible: true, ingredients: ['Carne Res', 'Tocino'], img: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=500' },
+            { id: 3, name: 'Pizza Pepperoni Supreme', category: 'pizzas', price: 32000, desc: 'Masa italiana artesanal con abundante pepperoni madurado.', stock: 10, visible: true, ingredients: ['Pepperoni', 'Mozzarella'], img: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500' },
+            { id: 4, name: 'Alitas BBQ Crujientes', category: 'alitas', price: 20000, desc: 'Bañadas en salsa de barbacoa dulce ahumada.', stock: 55, visible: true, ingredients: ['Alitas x8', 'BBQ'], img: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=500' },
+            { id: 5, name: 'Papas Nativas Especiales', category: 'acompañamientos', price: 12500, desc: 'Papas rústicas con tocineta picada y queso cheddar.', stock: 30, visible: true, ingredients: ['Papas', 'Cheddar'], img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500' },
+            { id: 6, name: 'Perro Americano Gigante', category: 'perros calientes', price: 15900, desc: 'Salchicha suiza de 22cm con papa ripiada.', stock: 14, visible: true, ingredients: ['Salchicha Suiza', 'Ripio'], img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJH54C02cZmm_OKCIT4jX1kg9dULUNHPcexehf73DZeg&s=10' },
+            { id: 7, name: 'Limonada de Coco Fresh', category: 'bebidas', price: 8500, desc: 'Zumo de limón natural batido con crema de coco espesa.', stock: 20, visible: true, ingredients: ['Limón', 'Coco'], img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500' }
+        ];
+
+        let cart = [];
+        let systemOrders = []; 
+        let historyBoxClosures = []; 
+        let orderCounter = 2000;
+        let selectedCategory = 'todas';
+        let currentUser = null;
+        let selectedProduct = null;
+        let selectedQuantity = 1;
+
+        // CUENTAS PRESET COMERCIALES EXIGIDAS
+        const staffAccounts = [
+            { email: 'admin@foodify.com', pass: 'admin123', name: 'Gerente Admin', role: 'admin' },
+            { email: 'cocina@foodify.com', pass: 'cocina123', name: 'Jefe de Cocina', role: 'cocina' },
+            { email: 'caja@foodify.com', pass: 'caja123', name: 'Cajero Central', role: 'caja' }
+        ];
+
+        function navigateTo(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
+            document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+            
+            document.getElementById(`view-${viewId}`).classList.add('active-view');
+            const link = document.getElementById(`link-${viewId}`);
+            if(link) link.classList.add('active');
+
+            if(viewId === 'menu') renderMenu();
+            if(viewId === 'cart') { renderCart(); updateServiceFlow(); }
+            if(viewId === 'cocina') { renderCocinaPanel(); renderCocinaStockTable(); }
+            if(viewId === 'caja') { renderCajaPanel(); renderExcelSheet(); }
+            if (viewId === 'admin') {
+    renderAdminPanel(); // Tu función que carga el inventario existente
+    renderAdminFeedback(); // NUEVO: Llama a esta función para que cargue los mensajes enviados
+}
+            window.scrollTo(0,0);
+        }
+
+        // RENDER DE PRODUCTOS PÚBLICOS
+        function renderMenu() {
+            const container = document.getElementById('menu-grid-container');
+            container.innerHTML = '';
+            const query = document.getElementById('search-input').value.toLowerCase();
+
+            products.filter(p => p.visible && (selectedCategory === 'todas' || p.category === selectedCategory) && p.name.toLowerCase().includes(query)).forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'prod-card';
+                card.onclick = () => openProductDetail(p.id);
+                card.innerHTML = `
+                    <img src="${p.img}" class="prod-img">
+                    <div class="prod-body">
+                        <h3 class="prod-title">${p.name}</h3>
+                        <p class="prod-desc">${p.desc}</p>
+                        <div class="prod-flex">
+                            <span class="prod-price">${p.stock === 0 ? '<span class="badge-out">Agotado</span>' : '$'+p.price.toLocaleString('es-CO')}</span>
+                            <span style="font-size:12px; font-weight:700; color:var(--primary)">Pedir <i class="fa-solid fa-chevron-right"></i></span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function setCategory(cat, btn) {
+            selectedCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderMenu();
+        }
+
+        function openProductDetail(productId) {
+            selectedProduct = products.find(p => p.id === productId);
+            selectedQuantity = 1;
+            navigateTo('detail');
+
+            const wrap = document.getElementById('detail-wrapper-content');
+            wrap.innerHTML = `
+                <img src="${selectedProduct.img}" class="detail-img-side">
+                <div class="detail-info-side">
+                    <span class="tag-cat">${selectedProduct.category.toUpperCase()}</span>
+                    <h1 class="detail-title">${selectedProduct.name}</h1>
+                    <p class="detail-desc">${selectedProduct.desc}</p>
+                    <div class="ing-tags">${selectedProduct.ingredients.map(i => `<span class="ing-tag"><i class="fa-solid fa-circle-check"></i> ${i}</span>`).join('')}</div>
+                    <div class="detail-price">$${selectedProduct.price.toLocaleString('es-CO')}</div>
+                    <div style="font-size:13px; color:var(--gray); margin-bottom:15px; font-weight:600;">Stock disponible: ${selectedProduct.stock} unidades</div>
+                    
+                    <div class="qty-selector">
+                        <button class="qty-btn" onclick="alterQty(-1)">-</button>
+                        <span class="qty-num" id="qty-counter">1</span>
+                        <button class="qty-btn" onclick="alterQty(1)">+</button>
+                    </div>
+                    <div class="subtotal-box"><span>Subtotal:</span><span class="prod-price" id="detail-subtotal">$${selectedProduct.price.toLocaleString('es-CO')}</span></div>
+                    <button class="btn-add-cart" onclick="validateAndAddToCart()"><i class="fa-solid fa-basket-shopping"></i> Agregar al Carrito</button>
+                </div>
+            `;
+        }
+
+        function alterQty(delta) {
+            if(selectedProduct.stock === 0) return;
+            selectedQuantity = Math.max(1, Math.min(selectedProduct.stock, selectedQuantity + delta));
+            document.getElementById('qty-counter').innerText = selectedQuantity;
+            document.getElementById('detail-subtotal').innerText = `$${(selectedProduct.price * selectedQuantity).toLocaleString('es-CO')}`;
+        }
+
+        // VALIDACIÓN OBLIGATORIA DE LOGIN ANTES DE AGREGAR AL CARRITO
+        function validateAndAddToCart() {
+            if(!currentUser) {
+                alert("⚠️ CONTROL DE ACCESO\nPara añadir platos al carrito y estructurar un pedido es obligatorio iniciar sesión.");
+                openModal('login-modal');
+                return;
+            }
+            if(selectedProduct.stock === 0) return alert("No quedan unidades de este producto en inventario.");
+
+            const itemExist = cart.find(i => i.product.id === selectedProduct.id);
+            if(itemExist) itemExist.qty += selectedQuantity; else cart.push({ product: selectedProduct, qty: selectedQuantity });
+            
+            updateFloatingCart();
+            alert("🛒 Producto integrado al carrito.");
+            navigateTo('menu');
+        }
+
+        function updateFloatingCart() {
+            const totalItems = cart.reduce((acc, curr) => acc + curr.qty, 0);
+            const totalCash = cart.reduce((acc, curr) => acc + (curr.qty * curr.product.price), 0);
+            const flt = document.getElementById('floating-cart-btn');
+            if(totalItems > 0) {
+                flt.style.display = 'flex';
+                document.getElementById('floating-cart-count').innerText = totalItems;
+                document.getElementById('floating-cart-total').innerText = `$${totalCash.toLocaleString('es-CO')}`;
+            } else { flt.style.display = 'none'; }
+        }
+
+        function renderCart() {
+            const list = document.getElementById('cart-list-items');
+            list.innerHTML = '';
+            if(cart.length === 0) {
+                list.innerHTML = '<p style="color:var(--gray); text-align:center; padding:20px; font-weight:600;">El carrito de compras está vacío.</p>';
+                document.getElementById('checkout-total-price').innerText = '$0';
+                return;
+                
+            }
+            cart.forEach((c, idx) => {
+                const item = document.createElement('div');
+                item.className = 'cart-item';
+                item.innerHTML = `
+                    <div>
+                        <h4 style="font-size:15px; font-weight:700;">${c.product.name}</h4>
+                        <span style="font-size:12px; color:var(--gray); font-weight:600;">${c.qty} Unid. x $${c.product.price.toLocaleString('es-CO')}</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <span style="font-weight:800; color:var(--primary);">$${(c.qty * c.product.price).toLocaleString('es-CO')}</span>
+                        <i class="fa-solid fa-trash-can" style="color:#dc3545; cursor:pointer;" onclick="killCartItem(${idx})"></i>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+            const t = cart.reduce((acc, curr) => acc + (curr.qty * curr.product.price), 0);
+            document.getElementById('checkout-total-price').innerText = `$${t.toLocaleString('es-CO')}`;
+        }
+
+        function killCartItem(idx) {
+            cart.splice(idx, 1);
+            updateFloatingCart();
+            renderCart();
+        }
+
+        function updateServiceFlow() {
+            const service = document.querySelector('input[name="delivery-type"]:checked').value;
+            const addressBox = document.getElementById('delivery-address-field');
+            const pWrapper = document.getElementById('payment-methods-wrapper');
+
+            if(service === 'Domicilio') {
+                addressBox.style.display = 'block';
+                pWrapper.innerHTML = `
+                    <label class="radio-label"><input type="radio" name="payment-method" value="PSE" checked onchange="toggleFormInputs()"> 💳 PSE / Débito Seguro</label>
+                    <label class="radio-label"><input type="radio" name="payment-method" value="Tarjeta de Crédito" onchange="toggleFormInputs()"> 💳 Tarjeta de Crédito</label>
+                    <label class="radio-label"><input type="radio" name="payment-method" value="Pagar en Efectivo" onchange="toggleFormInputs()"> 💵 Pagar en Efectivo (Contraentrega)</label>
+                `;
+            } else {
+                addressBox.style.display = 'none';
+                pWrapper.innerHTML = `
+                    <label class="radio-label"><input type="radio" name="payment-method" value="PSE" checked onchange="toggleFormInputs()"> 💳 PSE / Débito Seguro</label>
+                    <label class="radio-label"><input type="radio" name="payment-method" value="Tarjeta de Crédito" onchange="toggleFormInputs()"> 💳 Tarjeta de Crédito</label>
+                    <label class="radio-label"><input type="radio" name="payment-method" value="Pagar en Caja" onchange="toggleFormInputs()"> 🏪 Pagar en Caja Física</label>
+                `;
+            }
+            toggleFormInputs();
+        }
+
+        function toggleFormInputs() {
+            const m = document.querySelector('input[name="payment-method"]:checked').value;
+            document.getElementById('pse-fields').style.display = m === 'PSE' ? 'block' : 'none';
+            document.getElementById('credit-fields').style.display = m === 'Tarjeta de Crédito' ? 'block' : 'none';
+        }
+
+        // CONTROL Y GENERACIÓN DE PEDIDOS EN EL ECOSISTEMA
+        function processPayment() {
+            if(cart.length === 0) return alert("Agrega ítems primero.");
+            
+            const service = document.querySelector('input[name="delivery-type"]:checked').value;
+            const payment = document.querySelector('input[name="payment-method"]:checked').value;
+
+            if(service === 'Domicilio' && !document.getElementById('checkout-address').value.trim()) {
+                return alert("La dirección de entrega es obligatoria para domicilios.");
+                
+            }
+
+            if(payment === 'PSE') {
+                if(!document.getElementById('pse-bank').value) return alert("Por favor selecciona un banco.");
+                if(!document.getElementById('pse-name').value.trim() || !document.getElementById('pse-doc').value.trim()) return alert("Completa todos los campos obligatorios de PSE.");
+            } else if(payment === 'Tarjeta de Crédito') {
+                if(!document.getElementById('card-name').value.trim() || !document.getElementById('card-num').value.trim() || !document.getElementById('card-exp').value.trim() || !document.getElementById('card-cvc').value.trim()) return alert("Completa todos los datos de la tarjeta de crédito.");
+            }
+
+            orderCounter++;
+            const totalCost = cart.reduce((acc, curr) => acc + (curr.qty * curr.product.price), 0);
+            let paymentState = (payment === 'PSE' || payment === 'Tarjeta de Crédito') ? 'Pagado' : 'Pendiente';
+
+            const newOrder = {
+                id: orderCounter,
+                customer: currentUser.name,
+                items: [...cart],
+                total: totalCost,
+                serviceType: service,
+                payMethod: payment,
+                payStatus: paymentState,
+                kitchenStatus: 'En Cola'
+            };
+
+            // Descontar del inventario general
+            cart.forEach(c => {
+                const p = products.find(prod => prod.id === c.product.id);
+                if(p) p.stock = Math.max(0, p.stock - c.qty);
+            });
+
+            systemOrders.push(newOrder);
+            alert(`🎉 ¡Orden #${orderCounter} despachada con éxito!\nRegistrada en el monitor de cocina y libro contable de caja.`);
+            
+            cart = [];
+            updateFloatingCart();
+            navigateTo('home');
+        }
+
+        // PANEL DE COCINA: CONTROL DE PLATOS Y GESTIÓN DE STOCK PROPIA
+        function renderCocinaPanel() {
+            const container = document.getElementById('cocina-orders-container');
+            container.innerHTML = '';
+            const pending = systemOrders.filter(o => o.kitchenStatus !== 'Despachado');
+
+            if(pending.length === 0) {
+                container.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:20px; color:var(--gray); font-weight:600;">👨‍🍳 No hay pedidos pendientes de producción en este momento.</p>';
+                return;
+            }
+
+            pending.forEach(o => {
+                const card = document.createElement('div');
+                card.className = 'order-card';
+                card.innerHTML = `
+                    <span class="order-badge" style="background:var(--primary);">${o.kitchenStatus}</span>
+                    <h3 style="color:var(--primary);">Comanda #${o.id}</h3>
+                    <p style="font-size:12px; font-weight:600; margin-bottom:8px;">Cliente: ${o.customer} | <b>${o.serviceType}</b></p>
+                    <ul style="padding-left:18px; font-size:13px; margin-bottom:12px; font-weight:600;">
+                        ${o.items.map(i => `<li>${i.qty}x - ${i.product.name}</li>`).join('')}
+                    </ul>
+                    <button class="btn-action" style="background:var(--success); width:100%;" onclick="dispatchFromKitchen(${o.id})">Despachar e Imprimir</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function dispatchFromKitchen(id) {
+            const o = systemOrders.find(order => order.id === id);
+            if(o) o.kitchenStatus = 'Despachado';
+            renderCocinaPanel();
+        }
+
+        function renderCocinaStockTable() {
+            const container = document.getElementById('cocina-stock-container');
+            container.innerHTML = `
+                <table class="admin-table">
+                    <thead><tr><th>Plato / Acompañamiento</th><th>Categoría</th><th>Stock Actual</th><th>Modificar</th></tr></thead>
+                    <tbody id="cocina-stock-tbody"></tbody>
+                </table>
+            `;
+            const tbody = document.getElementById('cocina-stock-tbody');
+            products.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight:700;">${p.name}</td>
+                    <td><span class="tag-cat" style="margin:0;">${p.category}</span></td>
+                    <td><input type="number" value="${p.stock}" id="k-stock-${p.id}" style="width:70px; font-weight:700; text-align:center;"></td>
+                    <td><button class="btn-action" style="background:var(--primary);" onclick="saveKitchenStock(${p.id})">Actualizar</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function saveKitchenStock(id) {
+            const p = products.find(prod => prod.id === id);
+            const val = parseInt(document.getElementById(`k-stock-${id}`).value);
+            if(!isNaN(val) && val >= 0) {
+                p.stock = val;
+                alert(`Stock de "${p.name}" actualizado por cocina a: ${val} unidades.`);
+                renderCocinaStockTable();
+            }
+        }
+
+        // PANEL DE CAJA: MONITOR DE COBRO, LIBRO EXCEL E HISTORIAL
+        function renderCajaPanel() {
+            const container = document.getElementById('caja-orders-container');
+            container.innerHTML = '';
+            const pendingCash = systemOrders.filter(o => o.payStatus === 'Pendiente');
+
+            if(pendingCash.length === 0) {
+                container.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:15px; color:var(--gray); font-weight:600;">🏦 No hay cobros físicos pendientes en caja hoy.</p>';
+                return;
+            }
+
+            pendingCash.forEach(o => {
+                const card = document.createElement('div');
+                card.className = 'order-card';
+                card.innerHTML = `
+                    <span class="order-badge" style="background:#dc3545;">${o.payStatus}</span>
+                    <h3>Cobro Pedido #${o.id}</h3>
+                    <p style="font-size:15px; font-weight:800; margin:5px 0; color:var(--primary)">Total: $${o.total.toLocaleString('es-CO')}</p>
+                    <p style="font-size:12px; font-weight:600; color:var(--gray);">Canal: ${o.payMethod} | Servicio: ${o.serviceType}</p>
+                    <button class="btn-action" style="background:var(--info); width:100%; margin-top:10px;" onclick="collectOrderCash(${o.id})">Confirmar Pago Recibido</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function collectOrderCash(id) {
+            const o = systemOrders.find(order => order.id === id);
+            if(o) o.payStatus = 'Pagado';
+            renderCajaPanel();
+            renderExcelSheet();
+        }
+
+        function renderExcelSheet() {
+            const tbody = document.getElementById('excel-table-body');
+            tbody.innerHTML = '';
+            let totalGeneralCash = 0;
+
+            if(systemOrders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:15px; color:var(--gray);">Ninguna transacción registrada en la hoja de cálculo contable.</td></tr>';
+                return;
+            }
+
+            systemOrders.forEach(o => {
+                totalGeneralCash += o.total;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight:700;">TRX-${o.id}</td>
+                    <td>${o.customer}</td>
+                    <td>${o.serviceType}</td>
+                    <td><b>${o.payMethod}</b></td>
+                    <td style="font-weight:700; color:${o.payStatus==='Pagado'?'var(--success)':'#dc3545'}">${o.payStatus}</td>
+                    <td style="font-weight:700; color:var(--primary)">$${o.total.toLocaleString('es-CO')}</td>
+                    <td>
+                        <button class="btn-action" style="background:#dc3545; padding:4px 8px; font-size:11px;" onclick="deleteOrderFromSheet(${o.id})">
+                            <i class="fa-solid fa-trash-can"></i> Borrar
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Fila de Balance Total del día (Simulación de sumatoria Excel)
+            const totalTr = document.createElement('tr');
+            totalTr.className = 'excel-total-row';
+            totalTr.innerHTML = `
+                <td colspan="5" style="text-align:right; font-weight:800;">SUMATORIA BALANCE DIARIO TOTAL:</td>
+                <td colspan="2" style="font-weight:900;">$${totalGeneralCash.toLocaleString('es-CO')} COP</td>
+            `;
+            tbody.appendChild(totalTr);
+        }
+
+        // REGRA DE SEGURIDAD: PERMITIR BORRAR ANTES DEL CIERRE CONGELANTE
+        function deleteOrderFromSheet(id) {
+            if(confirm(`⚠️ ALERTA CONTABLE\n¿Está seguro de que desea eliminar permanentemente el registro de la orden #${id}?\nEsta acción modificará la sumatoria total del Excel.`)) {
+                const idx = systemOrders.findIndex(o => o.id === id);
+                if(idx !== -1) {
+                    systemOrders.splice(idx, 1);
+                    renderExcelSheet();
+                    renderCajaPanel();
+                }
+            }
+        }
+
+        // CIERRE DE CAJA ARCHIVADO E HISTÓRICO CONGELANTE
+        function executeDailyBoxClose() {
+            if(systemOrders.length === 0) return alert("No hay transacciones hoy para realizar un cierre contable.");
+            
+            if(confirm("🔒 ¿Cerrar caja definitivamente?\nTodos los pedidos actuales se archivarán de forma segura y el balance quedará inmutable.")) {
+                const totalCashDay = systemOrders.reduce((acc, curr) => acc + curr.total, 0);
+                const dateString = new Date().toLocaleString('es-CO');
+                
+                const closureArchive = {
+                    date: dateString,
+                    total: totalCashDay,
+                    count: systemOrders.length,
+                    auditor: currentUser.name
+                };
+
+                historyBoxClosures.push(closureArchive);
+                systemOrders = []; // Se limpia la mesa de trabajo para el día siguiente
+                
+                renderExcelSheet();
+                renderCajaPanel();
+                renderHistoryBoxTable();
+                alert("📦 Caja diaria consolidada y resguardada con éxito en el histórico del establecimiento.");
+            }
+        }
+
+        function renderHistoryBoxTable() {
+            const tbody = document.getElementById('history-box-body');
+            tbody.innerHTML = '';
+            if(historyBoxClosures.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--gray); padding:12px;">No se registran cierres consolidados archivados.</td></tr>';
+                return;
+            }
+            historyBoxClosures.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><b>${c.date}</b></td>
+                    <td style="color:var(--success); font-weight:700;">$${c.total.toLocaleString('es-CO')}</td>
+                    <td>${c.count} Órdenes procesadas</td>
+                    <td><i class="fa-solid fa-user-shield"></i> ${c.auditor}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // PANEL ADMINISTRADOR GLOBAL (STOCK MAESTRO)
+        function renderAdminPanel() {
+            const tbody = document.getElementById('admin-table-body');
+            tbody.innerHTML = '';
+            products.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight:700;">${p.name}</td>
+                    <td>${p.category}</td>
+                    <td><input type="number" value="${p.price}" id="adm-p-${p.id}" style="width:85px;"></td>
+                    <td><input type="number" value="${p.stock}" id="adm-s-${p.id}" style="width:65px;"></td>
+                    <td>
+                        <select id="adm-v-${p.id}">
+                            <option value="true" ${p.visible?'selected':''}>Visible</option>
+                            <option value="false" ${!p.visible?'selected':''}>Oculto</option>
+                        </select>
+                    </td>
+                    <td><button class="btn-action" style="background:var(--info)" onclick="saveAdminRow(${p.id})">Guardar</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function saveAdminRow(id) {
+            const p = products.find(prod => prod.id === id);
+            p.price = parseInt(document.getElementById(`adm-p-${id}`).value) || p.price;
+            p.stock = parseInt(document.getElementById(`adm-s-${id}`).value) || 0;
+            p.visible = document.getElementById(`adm-v-${id}`).value === 'true';
+            alert("Cambios guardados en el inventario central.");
+            renderAdminPanel();
+        }
+
+        // LÓGICA DE CONTROL DE SESIONES PRIVADAS Y SEGURIDAD
+        function executeLogin(e) {
+            e.preventDefault();
+            const mail = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+
+            // Buscar en cuentas precreadas del personal
+            const staff = staffAccounts.find(u => u.email === mail && u.pass === pass);
+            
+            if(staff) {
+                currentUser = staff;
+                hideAllStaffLinks();
+
+                // Mostrar de forma reactiva y única según su rol asignado
+                if(staff.role === 'admin') {
+                    document.getElementById('link-admin').style.display = 'inline-block';
+                    document.getElementById('link-cocina').style.display = 'inline-block';
+                    document.getElementById('link-caja').style.display = 'inline-block';
+                    navigateTo('admin');
+                } else if(staff.role === 'cocina') {
+                    document.getElementById('link-cocina').style.display = 'inline-block';
+                    navigateTo('cocina');
+                } else if(staff.role === 'caja') {
+                    document.getElementById('link-caja').style.display = 'inline-block';
+                    navigateTo('caja');
+                }
+                
+                syncAuthenticationUI();
+                closeModal('login-modal');
+                alert(`🔒 MÓDULO PRIVADO CONECTADO\nBienvenido, ${staff.name} [Rol: ${staff.role.toUpperCase()}]`);
+            } else {
+                // Login básico para simular clientes normales
+                currentUser = { email: mail, name: mail.split('@')[0], role: 'client' };
+                syncAuthenticationUI();
+                closeModal('login-modal');
+                alert(`¡Bienvenido Cliente, ${currentUser.name}! Ahora puedes comprar en la sección Menú.`);
+                navigateTo('menu');
+            }
+        }
+
+        function executeRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            currentUser = { email: document.getElementById('reg-email').value, name: name, role: 'client' };
+            syncAuthenticationUI();
+            closeModal('register-modal');
+            alert(`Registro exitoso. Bienvenido ${name}.`);
+            navigateTo('menu');
+        }
+
+        function syncAuthenticationUI() {
+            if(currentUser) {
+                document.getElementById('auth-buttons').style.display = 'none';
+                document.getElementById('user-profile').style.display = 'flex';
+                document.getElementById('user-display').innerHTML = `<i class="fa-solid fa-user-gear"></i> ${currentUser.name}`;
+                if(document.getElementById('btn-hero-register')) document.getElementById('btn-hero-register').style.display = 'none';
+            }
+        }
+
+        function hideAllStaffLinks() {
+            document.getElementById('link-admin').style.display = 'none';
+            document.getElementById('link-cocina').style.display = 'none';
+            document.getElementById('link-caja').style.display = 'none';
+        }
+
+        function logout() {
+    // 1. Limpiar físicamente todos los inputs del formulario de checkout
+    const camposAPurgar = [
+        'checkout-address', // Dirección de domicilio 🛵
+        'pse-name',         // Titular de cuenta PSE 🏦
+        'pse-doc',          // Cédula/NIT de PSE 🆔
+        'card-name',        // Nombre en la tarjeta 💳
+        'card-num',         // Número de tarjeta 💳
+        'card-exp',         // Vencimiento tarjeta 🗓️
+        'card-cvc'          // Código de seguridad tarjeta 🔒
+    ];
+
+    camposAPurgar.forEach(id => {
+        const inputElement = document.getElementById(id);
+        if (inputElement) {
+            inputElement.value = ''; // Lo deja en blanco
+            // Le añadimos esto para romper el autocompletado del navegador en este instante
+            inputElement.setAttribute('autocomplete', 'new-password'); 
+        }
+    });
+
+    // 2. Tu lógica original para cerrar la sesión
+    currentUser = null;
+    hideAllStaffLinks();
+    cart = [];
+    updateFloatingCart();
+    
+    // Cambiar visibilidad de botones en la navegación
+    document.getElementById('auth-buttons').style.display = 'flex';
+    document.getElementById('user-profile').style.display = 'none';
+    
+    // Redirigir al inicio de forma limpia
+    navigateTo('home');
+    
+    console.log("🧼 Sesión cerrada y protección contra autocompletado activada.");
+}
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function switchModal(closeId, openId) { closeModal(closeId); setTimeout(() => openModal(openId), 250); }
+        // AGREGAMOS UNA BASE DE DATOS LOCAL PARA CLIENTES REGISTRADOS
+let registeredClients = [];
+
+function executeLogin(e) {
+    e.preventDefault();
+    const mail = document.getElementById('login-email').value.trim();
+    const pass = document.getElementById('login-pass').value;
+
+    // 1. Validar si es una cuenta del personal (Admin, Cocina, Caja)
+    const staff = staffAccounts.find(u => u.email === mail && u.pass === pass);
+    
+    if(staff) {
+        currentUser = staff;
+        hideAllStaffLinks();
+
+        if(staff.role === 'admin') {
+            document.getElementById('link-admin').style.display = 'inline-block';
+            document.getElementById('link-cocina').style.display = 'inline-block';
+            document.getElementById('link-caja').style.display = 'inline-block';
+            navigateTo('admin');
+        } else if(staff.role === 'cocina') {
+            document.getElementById('link-cocina').style.display = 'inline-block';
+            navigateTo('cocina');
+        } else if(staff.role === 'caja') {
+            document.getElementById('link-caja').style.display = 'inline-block';
+            navigateTo('caja');
+        }
+        
+        syncAuthenticationUI();
+        closeModal('login-modal');
+        alert(`🔒 MÓDULO PRIVADO CONECTADO\nBienvenido, ${staff.name} [Rol: ${staff.role.toUpperCase()}]`);
+        return;
+    }
+
+    // 2. OBLIGATORIEDAD: Verificar si el cliente existe en la base de datos de registros
+    const clientFound = registeredClients.find(c => c.email === mail && c.pass === pass);
+
+    if (clientFound) {
+        currentUser = clientFound;
+        syncAuthenticationUI();
+        closeModal('login-modal');
+        alert(`¡Bienvenido de nuevo, ${currentUser.name}! Ya puedes continuar con tu compra.`);
+        navigateTo('menu');
+    } else {
+        // Si no se encuentra, se le deniega el acceso y se le sugiere registrarse
+        alert("❌ ERROR DE ACCESO\nEste correo no se encuentra registrado o la contraseña es incorrecta. Por favor, regístrate primero para poder comprar.");
+        switchModal('login-modal', 'register-modal');
+    }
+}
+
+function executeRegister(e) {
+    e.preventDefault();
+    const name = document.getElementById('reg-name').value.trim();
+    const mail = document.getElementById('reg-email').value.trim();
+    const pass = document.getElementById('reg-pass').value;
+
+    // Evitar duplicados en el registro
+    if (registeredClients.some(c => c.email === mail) || staffAccounts.some(s => s.email === mail)) {
+        alert("⚠️ El correo electrónico ya se encuentra registrado.");
+        return;
+    }
+
+    // Guardar el nuevo cliente en nuestra base de datos local
+    const newClient = { email: mail, name: name, pass: pass, role: 'client' };
+    registeredClients.push(newClient);
+
+    // Iniciar sesión automáticamente tras el registro exitoso
+    currentUser = newClient;
+    syncAuthenticationUI();
+    closeModal('register-modal');
+    alert(`🎉 ¡Registro Exitoso!\nBienvenido ${name}. Tu cuenta ha sido creada y ya estás autorizado para comprar.`);
+    navigateTo('menu');
+}// 1. Asegurar la existencia del arreglo de opiniones en el ámbito global
+if (typeof customerFeedback === 'undefined') {
+    var customerFeedback = [];
+}
+
+// 1. Declarar el array global de mensajes (colócalo al inicio de tu script o aquí mismo)
+if (typeof customerFeedback === 'undefined') {
+    var customerFeedback = [];
+}
+
+// 2. Función que se ejecuta al dar clic en el botón del footer
+function submitSecureFeedback() {
+    // Validar si el usuario NO ha iniciado sesión
+    if (!currentUser || currentUser === null) {
+        alert("⚠️ ACCESO RESTRINGIDO\nDebes registrarte e iniciar sesión con tu cuenta para poder enviar una opinión.");
+        return;
+    }
+
+    const nameInput = document.getElementById('feed-name');
+    const emailInput = document.getElementById('feed-email');
+    const msgInput = document.getElementById('feed-msg');
+
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const msg = msgInput.value.trim();
+
+    // Validar campos vacíos
+    if (name === "" || email === "" || msg === "") {
+        alert("⚠️ Por favor, rellena todos los campos antes de enviar tu mensaje.");
+        return;
+    }
+
+    const dateStr = new Date().toLocaleString('es-CO');
+
+    // Guardar el mensaje en el array global
+    customerFeedback.push({ 
+        date: dateStr, 
+        name: name, 
+        email: email, 
+        message: msg 
+    });
+
+    alert(`✨ ¡Gracias ${currentUser.name}!\nTu opinión ha sido enviada con éxito al panel de administración.`);
+    
+    // Limpiar solo el campo del mensaje
+    msgInput.value = '';
+
+    // Si el usuario conectado es admin, actualizar la tabla de opiniones de inmediato
+    if (currentUser.role === 'admin') {
+        renderAdminFeedback();
+    }
+}
+
+// 3. Función encargada de pintar los mensajes en el HTML nuevo
+function renderAdminFeedback() {
+    const tbody = document.getElementById('admin-feedback-tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+
+    if (customerFeedback.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--gray); padding: 15px; font-style: italic;">No se registran opiniones en el buzón aún.</td></tr>';
+        return;
+    }
+
+    customerFeedback.forEach(f => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td style="padding: 10px; border: 1px solid var(--light-gray);"><b>${f.date}</b></td>
+            <td style="padding: 10px; border: 1px solid var(--light-gray); font-weight:700;">${f.name}</td>
+            <td style="padding: 10px; border: 1px solid var(--light-gray);">${f.email}</td>
+            <td style="padding: 10px; border: 1px solid var(--light-gray); font-style: italic; color:#333;">"${f.message}"</td>
+        `;
+        tbody.appendChild(tr);
+    });
+    
+}
+   function logout() {
+            currentUser = null;
+            hideAllStaffLinks();
+            cart = [];
+            updateFloatingCart();
+            document.getElementById('auth-buttons').style.display = 'flex';
+            document.getElementById('user-profile').style.display = 'none';
+            alert("Sesión finalizada. Volviendo al entorno comercial público.");
+            navigateTo('home');
+        }
+
+
+    </script>
+</body>
+</html>
